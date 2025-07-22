@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORS Test</title>
+</head>
+<body>
+    <h1>CORS Test Page</h1>
+    <p>Click the button to make a request to your Spring Boot application.</p>
+    <button id="testButton">Test CORS</button>
+    <pre id="response"></pre>
+
+    <script>
+        document.getElementById('testButton').addEventListener('click', () => {
+            const url = 'http://localhost:8060/proxy-image/get-coordinates';
+            const responseElement = document.getElementById('response');
+
+            responseElement.textContent = `Fetching from: ${url}...`;
+
+            fetch(url, {credentials: 'include'})
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    responseElement.textContent = 'Success! Response:' + JSON.stringify(data, null, 2);
+                })
+                .catch(error => {
+                    responseElement.textContent = 'Error:' + error.toString();
+                    console.error('Fetch error:', error);
+                });
+        });
+    </script>
+</body>
+</html>
